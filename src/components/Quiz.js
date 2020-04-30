@@ -12,9 +12,12 @@ class Quiz extends React.Component {
     charactersWithHouses: [],
     correctAnswer: null,
     spells: [],
+    spellsArray: [],
     currentSpell: [],
     randomAnswers: null,
     isGoodOrBad: [],
+    randomIndex: 0,
+    questionType: '',
     score: 0
   }
 
@@ -26,12 +29,13 @@ class Quiz extends React.Component {
     } catch (err) {
       console.log(err)
     }
-    this.getHouses()
     this.getGoodiesAndBaddies()
+    this.getHouses()
+    this.getSpells()
     this.nextQuestion()
-  }
+  } 
 
-  // ? Setting Filtered Arrays
+  // ? SETTING FILTERED ARRAYS
 
   getGoodiesAndBaddies() {
     const isGoodOrBad = this.state.characters.filter(character => {
@@ -47,9 +51,17 @@ class Quiz extends React.Component {
     this.setState({ charactersWithHouses })
   }
 
+  // ? SETTING SPELLS ARRAY
+
+  getSpells() {
+    const spellsArray = this.state.spells
+    this.setState({ spellsArray })
+  }
+
   // ? CHOOSING WHICH QUESTION FORMAT
 
   nextQuestion() {
+    console.log(this.state.isGoodOrBad.length, this.state.spellsArray.length, this.state.charactersWithHouses.length)
     this.setState({ correctAnswer: null })
     const nextQuestion = Math.floor(Math.random() * 3)
     if (nextQuestion === 1) {
@@ -64,52 +76,53 @@ class Quiz extends React.Component {
   // ? GOOD GUY BAD GUY QUESTION LOGIC
 
   getGoodBadQuestion() {
-    const random = Math.floor(Math.random() * this.state.isGoodOrBad.length)
-    const character = this.state.isGoodOrBad[65]
+    const questionType = 'goodOrBad'
+    const randomIndex = Math.floor(Math.random() * this.state.isGoodOrBad.length)
+    const character = this.state.isGoodOrBad[randomIndex]
     const goodOrBad = character.deathEater === true ? 'Bad Guy' : 'Good Guy'
     const randomAnswers = ['Good Guy', 'Bad Guy']
-    this.setState({ character, question: character.name, correctAnswer: goodOrBad, randomAnswers })
+    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: goodOrBad, randomAnswers })
   }
 
   // ? HOUSE QUESTIONS LOGIC
 
   getRandomCharacter() {
-    const random = Math.floor(Math.random() * this.state.charactersWithHouses.length)
-    const character = this.state.charactersWithHouses[random]
+    const questionType = 'house'
+    const randomIndex = Math.floor(Math.random() * this.state.charactersWithHouses.length)
+    const character = this.state.charactersWithHouses[randomIndex]
     const randomAnswers = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
-    this.setState({ character, question: character.name, correctAnswer: character.house, randomAnswers })
+    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: character.house, randomAnswers })
   }
 
   // ? SPELLS QUESTIONS LOGIC
 
   getRandomSpell() {
-    const random = Math.floor(Math.random() * this.state.spells.length)
-    const currentSpell = this.state.spells[random]
+    const questionType = 'spells'
+    const randomIndex = Math.floor(Math.random() * this.state.spellsArray.length)
+    const currentSpell = this.state.spellsArray[randomIndex]
     
-    this.setState({ currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
+    this.setState({ questionType, randomIndex, currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
   }
 
   getRandomAnswers() {
-    const filteredSpells = this.state.spells.filter(spell => spell.spell !== this.state.currentSpell.spell)
+    const filteredSpells = this.state.spellsArray.filter(spell => spell.spell !== this.state.currentSpell.spell)
     const randomAnswers = []
     const ran1 = Math.floor(Math.random() * 150)
     let ran2 = Math.floor(Math.random() * 150)
     while (ran2 === ran1) {
       ran2 = Math.floor(Math.random() * 150)
     }
-    console.log(ran2)
     let ran3 = Math.floor(Math.random() * 150)
     while (ran3 === ran1 || ran3 === ran2) {
       ran3 = Math.floor(Math.random() * 150)
     }
-    console.log(ran1, ran2, ran3)
     randomAnswers[0] = filteredSpells[ran1].effect
     randomAnswers[1] = filteredSpells[ran2].effect
     randomAnswers[2] = filteredSpells[ran3].effect
     const ranI = Math.floor(Math.random() * 4)
     randomAnswers.splice(ranI, 0, this.state.correctAnswer)
-    console.log(randomAnswers)
+    
     this.setState({ randomAnswers })
   }
 
@@ -118,11 +131,23 @@ class Quiz extends React.Component {
   handleChoice = event => {
     if (event.target.value === this.state.correctAnswer) {
       notify.show('Correct!')
+      this.removeAnswer()
       this.setState({ randomAnswers: [], correctAnswer: null })
     } else {
       notify.show('Wrong!')
+      this.removeAnswer()
       this.setState({ randomAnswers: [], correctAnswer: null })
     } this.nextQuestion()
+  }
+
+  removeAnswer() {
+    const { questionType, charactersWithHouses, spellsArray, isGoodOrBad, randomIndex } = this.state
+    if (questionType === 'house') {
+      charactersWithHouses.splice(randomIndex, 1)
+    } else if (questionType === 'spells') {
+      spellsArray.splice(randomIndex, 1)
+    } else isGoodOrBad.splice(randomIndex, 1)
+    this.setState({ charactersWithHouses, spellsArray, isGoodOrBad })
   }
 
   correctNotify() {
