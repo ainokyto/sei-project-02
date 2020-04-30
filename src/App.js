@@ -1,9 +1,16 @@
 import React from 'react'
 
-const App = () => {
-  return (
-    <h1>Hello World</h1>
-  )
+import Quiz from './components/Quiz'
+
+class App extends React.Component {
+
+  render() {
+    return (
+      <section>
+        <Quiz />
+      </section>
+    )
+  }
 }
 
 export default App
