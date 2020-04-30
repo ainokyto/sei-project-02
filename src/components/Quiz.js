@@ -6,13 +6,15 @@ import { getAllSpells } from '../lib/api'
 
 class Quiz extends React.Component {
   state = {
+    question: null,
     character: null,
     characters: [],
     charactersWithHouses: [],
     correctAnswer: null,
     spells: [],
     currentSpell: [],
-    randomAnswers: ['', '', '', ''],
+    randomAnswers: null,
+    isGoodOrBad: [],
     score: 0
   }
 
@@ -25,13 +27,18 @@ class Quiz extends React.Component {
       console.log(err)
     }
     this.getHouses()
-    this.getRandomCharacter()
+    this.getGoodiesAndBaddies()
+    this.nextQuestion()
   }
 
-  // Button logic either Houses or Spells - map them
-  // randomAnswers - refactor to randomAnswers to contain the relevant logic
+  // ? Setting Filtered Arrays
 
-  // Functions Related to Houses Questions
+  getGoodiesAndBaddies() {
+    const isGoodOrBad = this.state.characters.filter(character => {
+      return character.deathEater === true || character.orderOfThePhoenix === true || character.dumbledoresArmy === true
+    })
+    this.setState({ isGoodOrBad })
+  }
 
   getHouses() {
     const charactersWithHouses = this.state.characters.filter(character => {
@@ -40,19 +47,47 @@ class Quiz extends React.Component {
     this.setState({ charactersWithHouses })
   }
 
+  // ? CHOOSING WHICH QUESTION FORMAT
+
+  nextQuestion() {
+    this.setState({ correctAnswer: null })
+    const nextQuestion = Math.floor(Math.random() * 3)
+    if (nextQuestion === 1) {
+      this.getRandomCharacter()
+    } else if (nextQuestion === 2) {
+      this.getRandomSpell()
+    } else {
+      this.getGoodBadQuestion()
+    }
+  }
+
+  // ? GOOD GUY BAD GUY QUESTION LOGIC
+
+  getGoodBadQuestion() {
+    const random = Math.floor(Math.random() * this.state.isGoodOrBad.length)
+    const character = this.state.isGoodOrBad[65]
+    const goodOrBad = character.deathEater === true ? 'Bad Guy' : 'Good Guy'
+    const randomAnswers = ['Good Guy', 'Bad Guy']
+    this.setState({ character, question: character.name, correctAnswer: goodOrBad, randomAnswers })
+  }
+
+  // ? HOUSE QUESTIONS LOGIC
+
   getRandomCharacter() {
     const random = Math.floor(Math.random() * this.state.charactersWithHouses.length)
     const character = this.state.charactersWithHouses[random]
     const randomAnswers = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
-    this.setState({ character, correctAnswer: character.house, randomAnswers })
+
+    this.setState({ character, question: character.name, correctAnswer: character.house, randomAnswers })
   }
 
-  // Functions related to Spells Questions
+  // ? SPELLS QUESTIONS LOGIC
 
   getRandomSpell() {
     const random = Math.floor(Math.random() * this.state.spells.length)
     const currentSpell = this.state.spells[random]
-    this.setState({ currentSpell: currentSpell, correctAnswer: currentSpell.effect })
+    
+    this.setState({ currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
   }
 
   getRandomAnswers() {
@@ -78,17 +113,16 @@ class Quiz extends React.Component {
     this.setState({ randomAnswers })
   }
 
-
-
-  // Function to determine if answer clicked is right or wrong
+  //? RIGHT OR WRONG LOGIC
 
   handleChoice = event => {
     if (event.target.value === this.state.correctAnswer) {
-      this.setState({ score: this.state.score + 10 })
-      return this.correctNotify()
+      notify.show('Correct!')
+      this.setState({ randomAnswers: [], correctAnswer: null })
     } else {
       notify.show('Wrong!')
-    } this.getRandomCharacter()
+      this.setState({ randomAnswers: [], correctAnswer: null })
+    } this.nextQuestion()
   }
 
   correctNotify() {
@@ -96,21 +130,17 @@ class Quiz extends React.Component {
   }
 
 
-
-
-  // check for macth on buttonClick and correct answer
-
-
   render() {
-    if (!this.state.character) return null
-    const { correctAnswer, character, score } = this.state
+    if (!this.state.randomAnswers) return null
+    const { correctAnswer, score, question } = this.state
     console.log(correctAnswer)
     console.log(score)
     return (
       <section>
         <Notifications />
         <h1>Harry Potter API</h1>
-        <p>{character.name}</p>
+        <p>{question}</p>
+        <p></p>
         <div className="buttons" >
           {this.state.randomAnswers.map((randomAnswer, id) => (
             <button key={id} className="button" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
