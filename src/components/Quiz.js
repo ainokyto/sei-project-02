@@ -10,33 +10,33 @@ class Quiz extends React.Component {
   state = {
     question: null,
     character: null,
+    correctAnswer: null,
+    randomAnswers: null,
     characters: [],
     charactersWithHouses: [],
-    correctAnswer: null,
     spells: [],
     spellsArray: [],
     currentSpell: [],
-    randomAnswers: null,
     isGoodOrBad: [],
     randomIndex: 0,
-    questionType: '',
     score: 0,
     questionsLeft: 10,
-    isPlaying: true,
-    filteredSpells: [],
-    ran1: 0,
-    ran2: 0,
-    ran3: 0
+    questionType: '',
+    isPlaying: true
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     try {
       const res = await getAllCharacters()
       const res2 = await getAllSpells()
       this.setState({ characters: res.data, spells: res2.data })
+      this.quizStart()
     } catch (err) {
       this.props.history.push('/not')
     }
+  }
+  
+  quizStart = () => {
     this.getGoodiesAndBaddies()
     this.getHouses()
     this.getSpells()
@@ -44,15 +44,15 @@ class Quiz extends React.Component {
   }
 
   // ? SETTING FILTERED ARRAYS
-
-  getGoodiesAndBaddies() {
+  
+  getGoodiesAndBaddies = () => {
     const isGoodOrBad = this.state.characters.filter(character => {
       return character.deathEater === true || character.orderOfThePhoenix === true || character.dumbledoresArmy === true
     })
     this.setState({ isGoodOrBad })
   }
 
-  getHouses() {
+  getHouses = () => {
     const charactersWithHouses = this.state.characters.filter(character => {
       return typeof (character.house) !== 'undefined' ? true : false
     })
@@ -61,7 +61,7 @@ class Quiz extends React.Component {
 
   // ? SETTING SPELLS ARRAY
 
-  getSpells() {
+  getSpells = () => {
     const spellsArray = this.state.spells
     this.setState({ spellsArray })
   }
@@ -69,7 +69,6 @@ class Quiz extends React.Component {
   // ? CHOOSING WHICH QUESTION FORMAT
 
   nextQuestion = () => {
-    console.log(this.state.questionsLeft)
     if (this.state.questionsLeft > 0) {
       this.setState({ correctAnswer: null })
       const nextQuestion = Math.floor(Math.random() * 3)
@@ -85,7 +84,7 @@ class Quiz extends React.Component {
 
   // ? GOOD GUY BAD GUY QUESTION LOGIC
 
-  getGoodBadQuestion() {
+  getGoodBadQuestion = () => {
     const questionType = 'goodOrBad'
     const randomIndex = Math.floor(Math.random() * this.state.isGoodOrBad.length)
     const character = this.state.isGoodOrBad[randomIndex]
@@ -96,7 +95,7 @@ class Quiz extends React.Component {
 
   // ? HOUSE QUESTIONS LOGIC
 
-  getRandomCharacter() {
+  getRandomCharacter = () => {
     const questionType = 'house'
     const randomIndex = Math.floor(Math.random() * this.state.charactersWithHouses.length)
     const character = this.state.charactersWithHouses[randomIndex]
@@ -111,12 +110,9 @@ class Quiz extends React.Component {
     const questionType = 'spells'
     const randomIndex = Math.floor(Math.random() * this.state.spellsArray.length)
     const currentSpell = this.state.spellsArray[randomIndex]
-
     this.setState({ questionType, randomIndex, currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
   }
-  // check state
-  // put in ternaries - this.state needs to exist
-  // change state back to initial state?
+
   getRandomAnswers = () => {
     const randomAnswers = []
     const filteredSpells = this.state.spellsArray.filter(spell => spell.spell !== this.state.currentSpell.spell)
@@ -150,7 +146,7 @@ class Quiz extends React.Component {
     }
   }
 
-  removeAnswer() {
+  removeAnswer = () => {
     const { questionType, charactersWithHouses, spellsArray, isGoodOrBad, randomIndex } = this.state
     if (questionType === 'house') {
       charactersWithHouses.splice(randomIndex, 1)
@@ -160,12 +156,12 @@ class Quiz extends React.Component {
     this.setState({ charactersWithHouses, spellsArray, isGoodOrBad })
   }
 
-  notifyCorrect() {
+  notifyCorrect = () => {
     notify.show(`Correct! Your score is ${this.state.score}`, 'success', 2000)
     this.nextQuestion()
   }
 
-  notifyWrong() {
+  notifyWrong = () => {
     notify.show(`Wrong! Your score is ${this.state.score}`, 'error', 2000)
     this.nextQuestion()
   }
@@ -184,22 +180,41 @@ class Quiz extends React.Component {
                 {`${questionType === 'house' ? ' ...which house does this person belong to?' : ''}`}
                 {`${questionType === 'goodOrBad' ? ' ...is this person a Good Guy or a Bad Guy?' : ''}`}
               </span></p>
-            <div className={`modal ${isPlaying ? '' : 'is-active'}`}>
-              <div className="modal-background"></div>
-              <div className="modal-card">
-                <header className="modal-card-head">
-                  <p className="modal-card-title">Quiz over! Your score is:</p>
-                </header>
-                <section className="modal-card-body">
-                  <div>{this.state.score}</div>
-                </section>
-                <Link to="/" className="button is-fullwidth">Back to home</Link>
-              </div>
-            </div>
-            <div className="buttons is-centered" >
-              {this.state.randomAnswers.map((randomAnswer, id) => (
-                <button key={id} className="button" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
-              ))}
+            {questionType === 'spells' && 
+              <div className="buttons is-centered spellbuttons" >
+                {this.state.randomAnswers.map((randomAnswer, id) => (
+                  <button key={id} className="button has-text-white has-background-dark is-half" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
+                ))}
+              </div>}
+            {questionType === 'house' && 
+              <div className="buttons is-centered" >
+                {this.state.randomAnswers.map((randomAnswer, id) => (
+                  <button key={id} 
+                    className={(randomAnswer === 'Gryffindor' && 'button is-danger') || 
+                    (randomAnswer === 'Hufflepuff' && 'button is-warning') ||
+                    (randomAnswer === 'Ravenclaw' && 'button is-link') ||
+                    (randomAnswer === 'Slytherin' && 'button is-success')} 
+                    onClick={this.handleChoice} 
+                    value={randomAnswer}>{randomAnswer}</button>
+                ))}
+              </div>}
+            {questionType === 'goodOrBad' && 
+              <div className="buttons is-centered" >
+                {this.state.randomAnswers.map((randomAnswer, id) => (
+                  <button key={id} className="button has-text-white has-background-dark" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
+                ))}
+              </div>}
+          </div>
+          <div className={`modal ${isPlaying ? '' : 'is-active'}`}>
+            <div className="modal-background"></div>
+            <div className="modal-card">
+              <header className="modal-card-head has-text-centered">
+                <p className="modal-card-title">Quiz over! Your score is:</p>
+              </header>
+              <section className="modal-card-body has-text-centered">
+                <div className="score is-large">{this.state.score}</div>
+              </section>
+              <Link to="/" className="button">Back to home</Link>
             </div>
           </div>
         </div>

@@ -11,6 +11,9 @@ const Home = () => (
         <p className="title is-1 has-text-centered has-text-black">
           The Harry Potter Quiz
         </p>
+        <p className="content is-large has-text-centered has-text-black">
+          I solemnly swear I am up to no good.
+        </p>
         <div className="has-text-centered">
           <Link to='/quiz' className="button has-text-white has-background-dark">Play the quiz</Link>
         </div>
