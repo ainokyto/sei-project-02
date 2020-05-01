@@ -1,6 +1,7 @@
 import React from 'react'
 import Notifications, { notify } from 'react-notify-toast'
 import { Link } from 'react-router-dom'
+import Spinner from './Spinner'
 
 import { getAllCharacters } from '../lib/api'
 import { getAllSpells } from '../lib/api'
@@ -40,7 +41,7 @@ class Quiz extends React.Component {
     this.getHouses()
     this.getSpells()
     this.nextQuestion()
-  } 
+  }
 
   // ? SETTING FILTERED ARRAYS
 
@@ -79,7 +80,7 @@ class Quiz extends React.Component {
       } else {
         this.getGoodBadQuestion()
       }
-    } else this.setState({ isPlaying: false })
+    } else this.setState({ isPlaying: false, question: '', questionType: '' })
   }
 
   // ? GOOD GUY BAD GUY QUESTION LOGIC
@@ -117,7 +118,7 @@ class Quiz extends React.Component {
   // put in ternaries - this.state needs to exist
   // change state back to initial state?
   getRandomAnswers = () => {
-    const randomAnswers = []    
+    const randomAnswers = []
     const filteredSpells = this.state.spellsArray.filter(spell => spell.spell !== this.state.currentSpell.spell)
     const ran1 = Math.floor(Math.random() * filteredSpells.length)
     let ran2 = Math.floor(Math.random() * filteredSpells.length)
@@ -135,7 +136,7 @@ class Quiz extends React.Component {
     randomAnswers.splice(ranI, 0, this.state.correctAnswer)
     this.setState({ randomAnswers })
   }
-  
+
 
   //? RIGHT OR WRONG LOGIC
 
@@ -160,35 +161,47 @@ class Quiz extends React.Component {
   }
 
   notifyCorrect() {
-    notify.show(`Correct! Your score is ${this.state.score}`)
+    notify.show(`Correct! Your score is ${this.state.score}`, 'success', 2000)
     this.nextQuestion()
   }
 
   notifyWrong() {
-    notify.show(`Wrong! Your score is ${this.state.score}`)
+    notify.show(`Wrong! Your score is ${this.state.score}`, 'error', 2000)
     this.nextQuestion()
   }
 
   render() {
-    if (!this.state.randomAnswers) return null
-    const { question, isPlaying } = this.state
+    if (!this.state.randomAnswers) return <Spinner />
+    const { question, questionType, isPlaying } = this.state
     return (
-      <section>
-        <Notifications />
-        <h1>Harry Potter API</h1>
-        <p>{question}</p>
-        <p></p>
-        <div className={`modal ${isPlaying ? '' : 'is-active'}`}>
-          <div className="modal-background"></div>
-          <div className="modal-content">
-            Quiz over!
+      <section className="hero is-fullheight quizhero">
+        <div className="hero-body">
+          <Notifications />
+          <div className="container has-text-centered">
+            <p className="title">{question} <br />
+              <span className="subtitle">
+                {`${questionType === 'spells' ? ' ...what does this spell do?' : ''}`}
+                {`${questionType === 'house' ? ' ...which house does this person belong to?' : ''}`}
+                {`${questionType === 'goodOrBad' ? ' ...is this person a Good Guy or a Bad Guy?' : ''}`}
+              </span></p>
+            <div className={`modal ${isPlaying ? '' : 'is-active'}`}>
+              <div className="modal-background"></div>
+              <div className="modal-card">
+                <header className="modal-card-head">
+                  <p className="modal-card-title">Quiz over! Your score is:</p>
+                </header>
+                <section className="modal-card-body">
+                  <div>{this.state.score}</div>
+                </section>
+                <Link to="/" className="button is-fullwidth">Back to home</Link>
+              </div>
+            </div>
+            <div className="buttons is-centered" >
+              {this.state.randomAnswers.map((randomAnswer, id) => (
+                <button key={id} className="button" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
+              ))}
+            </div>
           </div>
-          <Link to="/" className="button" aria-label="close">Play again</Link> 
-        </div>
-        <div className="buttons" >
-          {this.state.randomAnswers.map((randomAnswer, id) => (
-            <button key={id} className="button" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
-          ))}
         </div>
       </section>
     )

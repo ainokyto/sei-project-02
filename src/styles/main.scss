@@ -1,1 +1,35 @@
-@import '~bulma/bulma.sass'
+$family-sans-serif: 'Amiri', serif;
+
+@import '~bulma/bulma.sass';
+
+body {
+  font-family: 'Amiri', serif;
+}
+
+.buttons {
+  font-family: 'Amiri', serif;
+}
+
+.hero-img {
+  // background-image: url('https://www.pngitem.com/pimgs/m/19-199050_harry-potter-glasses-clipart-image-transparent-free-harry.png');
+  background-image: url('../assets/pngfind.com-tumblr-circle-png-952800.png');
+  height: 200px;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin: 50px
+}
+
+.Loading {
+  text-align: center;
+  padding: 100px;
+}
+
+.quizhero {
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(213,213,213,1) 100%);
+}
+
+// pointer {
+//   background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRegflES0efnIPU8foc9hMRb1WQOZgJjunC2EUlhfK5ekQiJMNy&usqp=CAU');
+// }
