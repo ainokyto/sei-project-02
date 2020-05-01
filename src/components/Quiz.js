@@ -1,5 +1,6 @@
 import React from 'react'
 import Notifications, { notify } from 'react-notify-toast'
+import { Link } from 'react-router-dom'
 
 import { getAllCharacters } from '../lib/api'
 import { getAllSpells } from '../lib/api'
@@ -18,7 +19,13 @@ class Quiz extends React.Component {
     isGoodOrBad: [],
     randomIndex: 0,
     questionType: '',
-    score: 0
+    score: 0,
+    questionsLeft: 10,
+    isPlaying: true,
+    filteredSpells: [],
+    ran1: 0,
+    ran2: 0,
+    ran3: 0
   }
 
   async componentDidMount() {
@@ -27,7 +34,7 @@ class Quiz extends React.Component {
       const res2 = await getAllSpells()
       this.setState({ characters: res.data, spells: res2.data })
     } catch (err) {
-      console.log(err)
+      this.props.history.push('/not')
     }
     this.getGoodiesAndBaddies()
     this.getHouses()
@@ -60,17 +67,19 @@ class Quiz extends React.Component {
 
   // ? CHOOSING WHICH QUESTION FORMAT
 
-  nextQuestion() {
-    console.log(this.state.isGoodOrBad.length, this.state.spellsArray.length, this.state.charactersWithHouses.length)
-    this.setState({ correctAnswer: null })
-    const nextQuestion = Math.floor(Math.random() * 3)
-    if (nextQuestion === 1) {
-      this.getRandomCharacter()
-    } else if (nextQuestion === 2) {
-      this.getRandomSpell()
-    } else {
-      this.getGoodBadQuestion()
-    }
+  nextQuestion = () => {
+    console.log(this.state.questionsLeft)
+    if (this.state.questionsLeft > 0) {
+      this.setState({ correctAnswer: null })
+      const nextQuestion = Math.floor(Math.random() * 3)
+      if (nextQuestion === 1) {
+        this.getRandomCharacter()
+      } else if (nextQuestion === 2) {
+        this.getRandomSpell()
+      } else {
+        this.getGoodBadQuestion()
+      }
+    } else this.setState({ isPlaying: false })
   }
 
   // ? GOOD GUY BAD GUY QUESTION LOGIC
@@ -97,47 +106,47 @@ class Quiz extends React.Component {
 
   // ? SPELLS QUESTIONS LOGIC
 
-  getRandomSpell() {
+  getRandomSpell = () => {
     const questionType = 'spells'
     const randomIndex = Math.floor(Math.random() * this.state.spellsArray.length)
     const currentSpell = this.state.spellsArray[randomIndex]
-    
+
     this.setState({ questionType, randomIndex, currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
   }
-
-  getRandomAnswers() {
+  // check state
+  // put in ternaries - this.state needs to exist
+  // change state back to initial state?
+  getRandomAnswers = () => {
+    const randomAnswers = []    
     const filteredSpells = this.state.spellsArray.filter(spell => spell.spell !== this.state.currentSpell.spell)
-    const randomAnswers = []
-    const ran1 = Math.floor(Math.random() * 150)
-    let ran2 = Math.floor(Math.random() * 150)
+    const ran1 = Math.floor(Math.random() * filteredSpells.length)
+    let ran2 = Math.floor(Math.random() * filteredSpells.length)
     while (ran2 === ran1) {
-      ran2 = Math.floor(Math.random() * 150)
+      ran2 = Math.floor(Math.random() * filteredSpells.length)
     }
-    let ran3 = Math.floor(Math.random() * 150)
+    let ran3 = Math.floor(Math.random() * filteredSpells.length)
     while (ran3 === ran1 || ran3 === ran2) {
-      ran3 = Math.floor(Math.random() * 150)
+      ran3 = Math.floor(Math.random() * filteredSpells.length)
     }
     randomAnswers[0] = filteredSpells[ran1].effect
     randomAnswers[1] = filteredSpells[ran2].effect
     randomAnswers[2] = filteredSpells[ran3].effect
     const ranI = Math.floor(Math.random() * 4)
     randomAnswers.splice(ranI, 0, this.state.correctAnswer)
-    
     this.setState({ randomAnswers })
   }
+  
 
   //? RIGHT OR WRONG LOGIC
 
   handleChoice = event => {
     if (event.target.value === this.state.correctAnswer) {
-      notify.show('Correct!')
       this.removeAnswer()
-      this.setState({ randomAnswers: [], correctAnswer: null })
+      this.setState({ questionsLeft: this.state.questionsLeft - 1, score: this.state.score + 10, randomAnswers: [], correctAnswer: null }, this.notifyCorrect)
     } else {
-      notify.show('Wrong!')
       this.removeAnswer()
-      this.setState({ randomAnswers: [], correctAnswer: null })
-    } this.nextQuestion()
+      this.setState({ questionsLeft: this.state.questionsLeft - 1, randomAnswers: [], correctAnswer: null }, this.notifyWrong)
+    }
   }
 
   removeAnswer() {
@@ -150,22 +159,32 @@ class Quiz extends React.Component {
     this.setState({ charactersWithHouses, spellsArray, isGoodOrBad })
   }
 
-  correctNotify() {
+  notifyCorrect() {
     notify.show(`Correct! Your score is ${this.state.score}`)
+    this.nextQuestion()
   }
 
+  notifyWrong() {
+    notify.show(`Wrong! Your score is ${this.state.score}`)
+    this.nextQuestion()
+  }
 
   render() {
     if (!this.state.randomAnswers) return null
-    const { correctAnswer, score, question } = this.state
-    console.log(correctAnswer)
-    console.log(score)
+    const { question, isPlaying } = this.state
     return (
       <section>
         <Notifications />
         <h1>Harry Potter API</h1>
         <p>{question}</p>
         <p></p>
+        <div className={`modal ${isPlaying ? '' : 'is-active'}`}>
+          <div className="modal-background"></div>
+          <div className="modal-content">
+            Quiz over!
+          </div>
+          <Link to="/" className="button" aria-label="close">Play again</Link> 
+        </div>
         <div className="buttons" >
           {this.state.randomAnswers.map((randomAnswer, id) => (
             <button key={id} className="button" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
