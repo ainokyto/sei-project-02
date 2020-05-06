@@ -157,12 +157,12 @@ class Quiz extends React.Component {
   }
 
   notifyCorrect = () => {
-    notify.show(`Correct! Your score is ${this.state.score}`, 'success', 2000)
+    notify.show(`Correct! Your score is ${this.state.score}`, 'success', 1000)
     this.nextQuestion()
   }
 
   notifyWrong = () => {
-    notify.show(`Wrong! Your score is ${this.state.score}`, 'error', 2000)
+    notify.show(`Wrong! Your score is ${this.state.score}`, 'error', 1000)
     this.nextQuestion()
   }
 
