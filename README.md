@@ -31,7 +31,7 @@ The app has been deployed with Netlify and is available [here](https://harrypott
 * react-loader-spinner
 * Bulma CSS Framework
 
-## Demonstration of App Flow
+## Demonstration of the App Flow
 
 ![harry-potter-api-quiz](./src/assets/screenshots/quiz.gif)
 
@@ -51,6 +51,9 @@ We then took the following steps:
 * Creating the quiz flow and game logic - this, as anticipated, took the vast majority of our time. 
 * To style our page, we used a mix of Bulma and SCSS.
 
+## Styling
+
+We decided to go with Bulma CSS Framework for some out-of-the-box styling to manage our time. Serif fonts don't seem to be very en vogue in web development at the moment, but we thought they fit the theme nicely and they work well in this kind of clean and slick interface. The rest of the styling we wanted to keep quite minimal but fun to allow the user interface to be as clear and intuitive as possible. 
 
 ## Quiz Logic
 
