@@ -4,7 +4,7 @@ My second dev project for the Software Engineering Immersive course, a React app
 
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
-### Goal: Build a React application that consumes any public API 
+## Goal: Build a React application that consumes any public API 
 
 ## Timeframe:
 
