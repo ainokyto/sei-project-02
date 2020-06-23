@@ -2,8 +2,6 @@
 
 My second dev project for the Software Engineering Immersive course, a React app pair-coded with GA classmate [Alex Wheldon](https://github.com/awheldon) in a 48-hour hackathon.
 
-***
-
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
 ### Goal: Build a React application that consumes any public API 
@@ -160,4 +158,4 @@ Having previously built a game as a solo project, I found pair-coding very benef
 
 ## Future features
 
-Hackathon code is rarely elegant or sophisticated, and this project is no exception - the code is quick and dirty and would definitely benefit from some refactoring. 
+Hackathon code is rarely elegant or sophisticated, and this project is no exception - the code is quick and dirty and would definitely benefit from some refactoring. PotterAPI has plenty more data to go around to satisfy all the trivia thirsty Potterheads out there. The quiz could be fleshed out a bit more with adding more question types based on the data objects, for example `ministryOfMagic`, `bloodStatus`, `species`, `boggart`.
