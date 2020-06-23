@@ -35,7 +35,7 @@ The app has been deployed with Netlify and is available [here](https://harrypott
 
 ## Demonstration of App Flow
 
-![harry-potter-api-quiz](./src/assets/screenshots/game.mov)
+![harry-potter-api-quiz](./src/assets/screenshots/quiz.gif)
 
 <br>
 
@@ -52,6 +52,7 @@ We then took the following steps:
 * Building a router with react-router-dom for a native feel.
 * Creating the quiz flow and game logic - this, as anticipated, took the vast majority of our time. 
 * To style our page, we used a mix of Bulma and SCSS.
+
 
 ## Quiz Logic
 
