@@ -2,7 +2,7 @@
 
 My second dev project for the Software Engineering Immersive course, a React app pair-coded with GA classmate [Alex Wheldon](https://github.com/awheldon) in a 48-hour hackathon.
 
-![harry-potter-api-home](./assets/screenshots/home.png)
+![harry-potter-api-home](./src/assets/screenshots/home.png)
 
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
@@ -35,7 +35,7 @@ The app has been deployed with Netlify and is available [here](https://harrypott
 
 ## Demonstration of App Flow
 
-![harry-potter-api-quiz](./assets/screenshots/game.mov)
+![harry-potter-api-quiz](./src/assets/screenshots/game.mov)
 
 <br>
 
