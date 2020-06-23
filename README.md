@@ -2,11 +2,9 @@
 
 My second dev project for the Software Engineering Immersive course, a React app pair-coded with GA classmate [Alex Wheldon](https://github.com/awheldon) in a 48-hour hackathon.
 
-***
-
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
-### Goal: Build a React application that consumes any public API 
+## Goal: Build a React application that consumes any public API 
 
 ## Timeframe:
 
