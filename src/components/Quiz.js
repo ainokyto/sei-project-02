@@ -11,7 +11,7 @@ class Quiz extends React.Component {
     question: null,
     character: null,
     correctAnswer: null,
-    randomAnswers: null,
+    options: null,
     characters: [],
     charactersWithHouses: [],
     spells: [],
@@ -89,8 +89,8 @@ class Quiz extends React.Component {
     const randomIndex = Math.floor(Math.random() * this.state.isGoodOrBad.length)
     const character = this.state.isGoodOrBad[randomIndex]
     const goodOrBad = character.deathEater === true ? 'Bad Guy' : 'Good Guy'
-    const randomAnswers = ['Good Guy', 'Bad Guy']
-    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: goodOrBad, randomAnswers })
+    const options = ['Good Guy', 'Bad Guy']
+    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: goodOrBad, options })
   }
 
   // ? HOUSE QUESTIONS LOGIC
@@ -99,9 +99,9 @@ class Quiz extends React.Component {
     const questionType = 'house'
     const randomIndex = Math.floor(Math.random() * this.state.charactersWithHouses.length)
     const character = this.state.charactersWithHouses[randomIndex]
-    const randomAnswers = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
+    const options = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
-    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: character.house, randomAnswers })
+    this.setState({ questionType, randomIndex, character, question: character.name, correctAnswer: character.house, options })
   }
 
   // ? SPELLS QUESTIONS LOGIC
@@ -110,11 +110,11 @@ class Quiz extends React.Component {
     const questionType = 'spells'
     const randomIndex = Math.floor(Math.random() * this.state.spellsArray.length)
     const currentSpell = this.state.spellsArray[randomIndex]
-    this.setState({ questionType, randomIndex, currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getRandomAnswers)
+    this.setState({ questionType, randomIndex, currentSpell, question: currentSpell.spell, correctAnswer: currentSpell.effect }, this.getOptions)
   }
 
-  getRandomAnswers = () => {
-    const randomAnswers = []
+  getOptions = () => {
+    const options = []
     const filteredSpells = this.state.spellsArray.filter(spell => spell.spell !== this.state.currentSpell.spell)
     const ran1 = Math.floor(Math.random() * filteredSpells.length)
     let ran2 = Math.floor(Math.random() * filteredSpells.length)
@@ -125,12 +125,12 @@ class Quiz extends React.Component {
     while (ran3 === ran1 || ran3 === ran2) {
       ran3 = Math.floor(Math.random() * filteredSpells.length)
     }
-    randomAnswers[0] = filteredSpells[ran1].effect
-    randomAnswers[1] = filteredSpells[ran2].effect
-    randomAnswers[2] = filteredSpells[ran3].effect
+    options[0] = filteredSpells[ran1].effect
+    options[1] = filteredSpells[ran2].effect
+    options[2] = filteredSpells[ran3].effect
     const ranI = Math.floor(Math.random() * 4)
-    randomAnswers.splice(ranI, 0, this.state.correctAnswer)
-    this.setState({ randomAnswers })
+    options.splice(ranI, 0, this.state.correctAnswer)
+    this.setState({ options })
   }
 
 
@@ -139,10 +139,10 @@ class Quiz extends React.Component {
   handleChoice = event => {
     if (event.target.value === this.state.correctAnswer) {
       this.removeAnswer()
-      this.setState({ questionsLeft: this.state.questionsLeft - 1, score: this.state.score + 10, randomAnswers: [], correctAnswer: null }, this.notifyCorrect)
+      this.setState({ questionsLeft: this.state.questionsLeft - 1, score: this.state.score + 10, options: [], correctAnswer: null }, this.notifyCorrect)
     } else {
       this.removeAnswer()
-      this.setState({ questionsLeft: this.state.questionsLeft - 1, randomAnswers: [], correctAnswer: null }, this.notifyWrong)
+      this.setState({ questionsLeft: this.state.questionsLeft - 1, options: [], correctAnswer: null }, this.notifyWrong)
     }
   }
 
@@ -167,7 +167,7 @@ class Quiz extends React.Component {
   }
 
   render() {
-    if (!this.state.randomAnswers) return <Spinner />
+    if (!this.state.options) return <Spinner />
     const { question, questionType, isPlaying } = this.state
     return (
       <section className="hero is-fullheight quizhero">
@@ -182,26 +182,26 @@ class Quiz extends React.Component {
               </span></p>
             {questionType === 'spells' && 
               <div className="buttons is-centered spellbuttons" >
-                {this.state.randomAnswers.map((randomAnswer, id) => (
-                  <button key={id} className="button has-text-white has-background-dark is-half" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
+                {this.state.options.map((option, id) => (
+                  <button key={id} className="button has-text-white has-background-dark is-half" onClick={this.handleChoice} value={option}>{option}</button>
                 ))}
               </div>}
             {questionType === 'house' && 
               <div className="buttons is-centered" >
-                {this.state.randomAnswers.map((randomAnswer, id) => (
+                {this.state.options.map((option, id) => (
                   <button key={id} 
-                    className={(randomAnswer === 'Gryffindor' && 'button is-danger') || 
-                    (randomAnswer === 'Hufflepuff' && 'button is-warning') ||
-                    (randomAnswer === 'Ravenclaw' && 'button is-link') ||
-                    (randomAnswer === 'Slytherin' && 'button is-success')} 
+                    className={(option === 'Gryffindor' && 'button is-danger') || 
+                    (option === 'Hufflepuff' && 'button is-warning') ||
+                    (option === 'Ravenclaw' && 'button is-link') ||
+                    (option === 'Slytherin' && 'button is-success')} 
                     onClick={this.handleChoice} 
-                    value={randomAnswer}>{randomAnswer}</button>
+                    value={option}>{option}</button>
                 ))}
               </div>}
             {questionType === 'goodOrBad' && 
               <div className="buttons is-centered" >
-                {this.state.randomAnswers.map((randomAnswer, id) => (
-                  <button key={id} className="button has-text-white has-background-dark" onClick={this.handleChoice} value={randomAnswer}>{randomAnswer}</button>
+                {this.state.options.map((option, id) => (
+                  <button key={id} className="button has-text-white has-background-dark" onClick={this.handleChoice} value={option}>{option}</button>
                 ))}
               </div>}
           </div>
