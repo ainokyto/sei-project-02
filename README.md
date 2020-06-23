@@ -2,7 +2,7 @@
 
 My second dev project for the Software Engineering Immersive course, a React app pair-coded with GA classmate [Alex Wheldon](https://github.com/awheldon) in a 48-hour hackathon.
 
-![harry-potter-api-home](./src/assets/screenshots/home.png)
+***
 
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
@@ -37,7 +37,7 @@ The app has been deployed with Netlify and is available [here](https://harrypott
 
 ![harry-potter-api-quiz](./src/assets/screenshots/quiz.gif)
 
-<br>
+***
 
 The Quiz has three question types: <i>Is N.N. Good Or Bad</i>, <i>Which House Does N.N. Belong To</i>, and <i>What Does This Spell Do</i>. After each question, a toast notifies player whether they were correct or false and displays their current score. The quiz goes on for ten questions, when the quiz is over player lands on a module displaying their result and a button to redirect them to home.
 
