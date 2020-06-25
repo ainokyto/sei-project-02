@@ -153,7 +153,7 @@ removeAnswer = () => {
 
 ### Challenges
 
-Building our first React app from scratch provided a fair amount of challenges, and getting comfortable with the asynchronous nature of state changes was definitely the most taxing part of the project. After finishing the majority of our game logic, state asynchronicity was our big gotcha - a fair chunk of our time was spent on figuring out how to get everything to happen in the correct order - until we discovered the use of a callback function on setState.
+Building our first React app from scratch provided a fair amount of challenges, and getting comfortable with the asynchronous nature of state changes was definitely the most taxing part of the project. After finishing the majority of our game logic, state asynchronicity was our big gotcha - a fair chunk of our time was spent on figuring out how to get everything to happen in the correct order - until we discovered asynchronous callbacks.
 
 ### Wins
 
