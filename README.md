@@ -157,8 +157,12 @@ Building our first React app from scratch provided a fair amount of challenges, 
 
 ### Wins
 
-Having previously built a game as a solo project, I found pair-coding very beneficial. Creating logic in particular was very efficient as Alex and I were able to bounce off ideas with each other thus being able to work through any blockers fairly efficiently. Also a big win was that any challenges, communication or otherwise, of pair-coding a whole project remotely we were able to overcome, and the project improved my technical communication massively.
+Having previously built a game as a solo project, I found pair-coding very beneficial. Creating logic in particular was very efficient as Alex and I were able to bounce off ideas with each other thus being able to work through any blockers fairly efficiently.
 
 ## Future features
 
 Hackathon code is rarely elegant or sophisticated, and this project is no exception - the code is quick and dirty and would definitely benefit from some refactoring. PotterAPI has plenty more data to go around to satisfy all the trivia thirsty Potterheads out there. The quiz could be fleshed out a bit more with adding more question types based on the data objects, for example `ministryOfMagic`, `bloodStatus`, `species`, `boggart`.
+
+## Key learnings
+
+This project hugely added my knowledge about accessing and leveraging API endpoints. Also the project improved my technical communication massively: as we did a pair-coding hackathon remotely, any challenges, communication or otherwise, were a challenge to overcome, and we did just that.
