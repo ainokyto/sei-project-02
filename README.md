@@ -57,7 +57,11 @@ We decided to go with Bulma CSS Framework for some out-of-the-box styling to man
 
 ## Quiz Logic
 
-As mentioned above, the quiz has three question types: <i>N.N. ...Good Guy Or Bad Guy?</i>, <i> N.N. ...Which House Do They Belong To?</i>, and <i>What Does This Spell Do?</i>. Each question has four options of which one is correct and three are randomly pulled from an array of that question type's options.
+As mentioned above, the quiz has three question types: 
+* <i>N.N. ...Good Guy Or Bad Guy?</i> 
+* <i> N.N. ...Which House Do They Belong To?</i> 
+* <i>What Does This Spell Do?</i> 
+Each question has four options of which one is correct and three are randomly pulled from an array of that question type's options.
 
 In the PotterAPI Characters dataset, not all objects had a key-value pair for `house` to signify their Hogwarts house, or `deathEater`, `dumbledoresArmy` or `orderOfThePhoenix` to signify whether they were to be classed as a 'Good Guy' or a 'Bad Guy'. We filtered through the dataset to find the objects that made the cut:
 
