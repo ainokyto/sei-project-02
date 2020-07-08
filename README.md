@@ -44,7 +44,10 @@ The Quiz has three question types: <i>Is N.N. Good Or Bad</i>, <i>Which House Do
 We started by prospecting free APIs on the Internet, and settled on a Harry Potter API that lists the dataset of 195 characters and 151 spells in J.K. Rowling's Wizarding World. After hooking into the API with Insomnia REST Client to inspect the dataset, we soon settled on the idea of building a trivia quiz that extracts the questions, options and answers from the dataset.
 
 We then took the following steps:
-* Creating the app’s wireframes.
+* Creating the app’s wireframes (picture example from the <i>Which House Does N.N. Belong To</i> question type)
+
+![harry-potter-api-quiz](./src/assets/screenshots/miro.png)
+
 * Writing out and planning the pseudo code.
 * Creating the main page and necessary components in React: home, quiz, footer, loader spinner and error page.
 * Building a router with react-router-dom for a native feel.
