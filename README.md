@@ -4,7 +4,7 @@ My second dev project for the Software Engineering Immersive course, a React app
 
 The app has been deployed with Netlify and is available [here](https://harrypotterquiz.netlify.app).
 
-## Goal: Build a React application that consumes any public API 
+## Brief: Build a React application that consumes any public API 
 
 ## Timeframe:
 
@@ -60,7 +60,11 @@ We decided to go with Bulma CSS Framework for some out-of-the-box styling to man
 
 ## Quiz Logic
 
-As mentioned above, the quiz has three question types: <i>N.N. ...Good Guy Or Bad Guy?</i>, <i> N.N. ...Which House Do They Belong To?</i>, and <i>What Does This Spell Do?</i>. Each question has four options of which one is correct and three are randomly pulled from an array of that question type's options.
+As mentioned above, the quiz has three question types: 
+* <i>N.N. ...Good Guy Or Bad Guy?</i> 
+* <i> N.N. ...Which House Do They Belong To?</i> 
+* <i>What Does This Spell Do?</i> 
+Each question has four options of which one is correct and three are randomly pulled from an array of that question type's options.
 
 In the PotterAPI Characters dataset, not all objects had a key-value pair for `house` to signify their Hogwarts house, or `deathEater`, `dumbledoresArmy` or `orderOfThePhoenix` to signify whether they were to be classed as a 'Good Guy' or a 'Bad Guy'. We filtered through the dataset to find the objects that made the cut:
 
@@ -160,8 +164,12 @@ Building our first React app from scratch provided a fair amount of challenges, 
 
 ### Wins
 
-Having previously built a game as a solo project, I found pair-coding very beneficial. Creating logic in particular was very efficient as Alex and I were able to bounce off ideas with each other thus being able to work through any blockers fairly efficiently. Also a big win was that any challenges, communication or otherwise, of pair-coding a whole project remotely we were able to overcome, and the project improved my technical communication massively.
+Having previously built a game as a solo project, I found pair-coding very beneficial. Creating logic in particular was very efficient as Alex and I were able to bounce off ideas with each other thus being able to work through any blockers fairly efficiently.
 
 ## Future features
 
 Hackathon code is rarely elegant or sophisticated, and this project is no exception - the code is quick and dirty and would definitely benefit from some refactoring. PotterAPI has plenty more data to go around to satisfy all the trivia thirsty Potterheads out there. The quiz could be fleshed out a bit more with adding more question types based on the data objects, for example `ministryOfMagic`, `bloodStatus`, `species`, `boggart`.
+
+## Key learnings
+
+This project hugely added my knowledge about accessing and leveraging API endpoints. Also the project improved my technical communication massively: as we did a pair-coding hackathon remotely, any challenges, communication or otherwise, were a challenge to overcome, and we did just that.
